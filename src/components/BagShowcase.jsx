@@ -36,6 +36,9 @@ export default function BagShowcase() {
   // Success page overlay state
   const [showSuccessPage, setShowSuccessPage] = useState(false);
 
+  // isTransitioning: Blocks new bag selections while a layoutId fly animation is in progress
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   // activeBag: Holds the data for the active product
   const activeBag = bagsData[activeKey];
 
@@ -54,10 +57,14 @@ export default function BagShowcase() {
   }, [activeBag.path]);
 
   // handleBagSelect: Triggered when a user clicks on an explore thumbnail.
-  // It prepends the old active bag to index 0 of the explorer list and sets the new active key.
+  // Guards against rapid clicks mid-flight to prevent layoutId spring interruption glitches.
   const handleBagSelect = (selectedKey) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setExploreKeys([activeKey, ...exploreKeys.filter((k) => k !== selectedKey)]);
     setActiveKey(selectedKey);
+    // Ungate after spring animation completes (~350ms at stiffness:200, damping:25)
+    setTimeout(() => setIsTransitioning(false), 350);
   };
 
   // handleAddToCart: Appends active bag to cart items list or increments quantity
@@ -363,7 +370,7 @@ export default function BagShowcase() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
                     onClick={() => handleBagSelect(key)}
                     className="group relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-transparent border-0 cursor-pointer shrink-0 outline-none"
                   >
@@ -378,7 +385,7 @@ export default function BagShowcase() {
                       className="w-[80%] h-[80%] object-contain z-10"
                       animate={{ opacity: 0.7, scale: 1 }}
                       whileHover={{ scale: 1.08, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 25 }}
                     />
                   </motion.button>
                 );
@@ -423,10 +430,11 @@ export default function BagShowcase() {
             return (
               <motion.img
                 key={key}
+                layout
                 layoutId={`bag-img-${key}`}
                 src={item.path}
                 alt={item.name}
-                transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                transition={{ type: "spring", stiffness: 200, damping: 25 }}
                 className="absolute w-[180px] sm:w-[240px] md:w-[380px] h-auto object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.25)]"
               />
             );
