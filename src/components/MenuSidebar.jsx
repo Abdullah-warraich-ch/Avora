@@ -8,7 +8,7 @@ export default function MenuSidebar({ isOpen, onClose, activeBag }) {
       animate={{ x: 0 }}
       exit={{ x: "-100%" }}
       transition={{ type: "spring", damping: 25, stiffness: 200 }}
-      className="absolute top-0 left-0 h-full w-[280px] sm:w-[320px] text-white z-50 p-8 shadow-[10px_0_30px_rgba(0,0,0,0.3)] border-r border-white/5 flex flex-col justify-between"
+      className="fixed top-0 left-0 h-full w-[280px] sm:w-[320px] text-white z-50 p-8 shadow-[10px_0_30px_rgba(0,0,0,0.3)] border-r border-white/5 flex flex-col justify-between"
       style={{
         background: `linear-gradient(135deg, ${activeBag.gradientStart} 0%, ${activeBag.gradientEnd} 100%)`
       }}
