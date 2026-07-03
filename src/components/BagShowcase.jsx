@@ -146,8 +146,8 @@ export default function BagShowcase() {
   }, []);
 
   return (
-    // ROOT WRAPPER: Scrollable two-section page
-    <div className="relative font-sans select-none">
+    // ROOT WRAPPER: Single viewport dashboard
+    <div className="relative w-screen h-screen overflow-hidden bg-black select-none font-sans">
       
       {/* ====================================================
           BACKDROP OVERLAY (For both Menu and Cart sidebars)
@@ -460,40 +460,7 @@ export default function BagShowcase() {
           </div>
 
         </section>
-      </LayoutGroup>{/* end hero section */}
-
-      {/* ====================================================
-          BG.PNG SECTION
-          ==================================================== */}
-      <section
-        className="w-screen h-screen relative overflow-hidden"
-        style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
-      >
-        {/* Subtle dark overlay for depth */}
-        <div className="absolute inset-0 bg-black/25" />
-
-        {/* Centered bag image — appears as user scrolls in */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={activeKey}
-              src={activeBag.path}
-              alt={activeBag.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="w-[240px] md:w-[480px] h-auto object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)]"
-            />
-          </AnimatePresence>
-        </div>
-
-        {/* Bottom label */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center text-white z-10 pointer-events-none">
-          <p className="text-[10px] font-black tracking-[0.3em] uppercase opacity-60">The Collection</p>
-          <h2 className="text-2xl md:text-4xl font-extrabold mt-2 drop-shadow-md font-display">{activeBag.heroLine}</h2>
-        </div>
-      </section>
+      </LayoutGroup>
 
     </div>
   );
